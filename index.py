@@ -1,29 +1,41 @@
-from requests import post
 from auth_key import auth_key
 
+from functions import get_request_params, translate_deepl
+
+# Define la dirección URL de la API de Deepl
 url = 'https://api-free.deepl.com/v2/translate'
 auth_key = auth_key()
 
-get_request_params = lambda auth_key, text, source_lang, target_lang: {
-    'auth_key': auth_key,
-    'text': text,
-    'source_lang': source_lang,
-    'target_lang': target_lang,
-    'alternative_translations': 1
-}
+languages = [
+    (1, 'ES', 'Spanish'),
+    (2, 'EN', 'English'),
+    (3, 'DE', 'German'),
+    (4, 'FR', 'French'),
+    (5, 'IT', 'Italian'),
+    (6, 'NL', 'Dutch'),
+    (7, 'PL', 'Polish'),
+]
 
-def translate_deepl(url, params):
-    response = post(url, data=params)
-    if response.status_code == 200:
-        response_json = response.json()
-        for translation in response_json['translations']:
-            print(translation['text'])
-    else:
-        print(f'Request failed with status code: {response.status_code}')
+other_translation = True
+while other_translation:
+    print("\nLenguajes disponibles:")
+    for idx, language in enumerate(languages):
+        print(f"{idx + 1}. {language[2]} ({language[1]})")
 
-text = 'Hola mundo hermoso'
-source_lang = 'ES'
-target_lang = 'EN'
+    selected_source_lang = int(input("\nSelecciona el número del lenguaje de origen: "))
+    selected_target_lang = int(input("Selecciona el número del lenguaje de destino: "))
 
-params= get_request_params(auth_key, text, source_lang, target_lang)
-translate_deepl(url, params)
+    source_lang = languages[selected_source_lang - 1][1]
+    target_lang = languages[selected_target_lang - 1][1]
+
+    text = input("Ingresa el texto a traducir: ")
+    
+    params = get_request_params(auth_key, text, source_lang, target_lang)
+    translate_deepl(url, params)
+
+    other = input("¿Quieres otra traducción? (S/N)")
+    while other not in ['s', 'S', 'n', 'N']:
+        print("Entrada inválida, por favor escribe 's' o 'n'.")
+        other = input("¿Quieres otra traducción? (S/N)")
+
+    if other in ['n', 'N']: other_translation = False
