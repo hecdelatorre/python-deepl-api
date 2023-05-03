@@ -2,6 +2,8 @@
 
 Este es un proyecto de traducción de texto utilizando la API de Deepl.
 
+![2023-05-02-225326-753x522-scrot.png](https://i.postimg.cc/43KkKGbQ/2023-05-02-225326-753x522-scrot.png)
+
 ## Requisitos
 - Tener una cuenta en DeepL
 - Obtener una clave de acceso a la API de Deepl
